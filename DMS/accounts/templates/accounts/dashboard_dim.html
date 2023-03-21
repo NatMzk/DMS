@@ -1,0 +1,130 @@
+{%  extends 'accounts/main.html' %}
+{% block content %}
+
+<br>
+
+<head>
+
+
+</head>
+
+	<div class="col-md-4">
+		<h5>TABLE2:</h5>
+		<hr>
+		<div id = "Test1" class="card card-body" style="background-color: #191a1c;">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Create New Row</a>
+			<br>
+			<div class = "Test2">
+			<table id = "_deviceDim" class="table table-sm">
+				<tr>
+					<th class = "headerSortUp" onclick="sortTable(0)">#</th>
+					<th class = "headerSortUp" onclick="sortTable(1)">Device ID</th>
+					<th class = "headerSortUp" onclick="sortTable(2)">Name</th>
+					<th class = "headerSortUp" onclick="sortTable(3)">Model</th>
+					<th class = "headerSortUp" onclick="sortTable(4)">Status</th>
+				</tr>
+				{% for result in devices %}
+				<tr>
+					<td>{{result.id}}</td>
+					<td>{{result.device_id}}</td>
+					<td>{{result.device_name}}</td>
+					<td>{{result.device_model}}</td>
+					<td>{{result.device_status}}</td>
+					<!--<td><a class="btn btn-sm btn-info">Update</a></td>-->
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+		</div>
+	</div>
+
+</div>
+
+<!-- Script to dynamically refresh table using jQuerry library and AJAX function
+
+	-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script type="text/javascript">
+
+/*
+##########################################################
+### Dynamically fetch data from database every 5 sec
+##########################################################
+*/
+    const interval = setInterval(function() {
+
+        $.ajax({
+            type: 'GET',
+            url: {% url 'device_dim_refresh' %},
+        })
+        .done(function(response) {
+            $('#_deviceDim').html(response);
+        });
+
+    }, 5000)  
+
+/*
+##########################################################
+### Mechanism to sort data by columns
+##########################################################
+*/
+
+
+$("th").on("click", function(){
+	var column = $(this).data("column")
+	var order = $(this).data("order")
+	console.log("Column was clicked.", column, order)
+
+	if(order == "desc"){
+		$(this).data("order", "asc")
+	}else{
+		$(this).data("order", "desc")
+	}
+})
+
+function sortTable(n) {
+	clearInterval(interval) /* Stop data sync when data is sorted */
+	$("th").toggleClass('headerSortUp');
+	$("th").toggleClass('headerSortDown');
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("_deviceDim");
+  switching = true;
+  dir = "asc";
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+
+
+{% endblock %}
+
