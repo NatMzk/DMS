@@ -1,0 +1,20 @@
+<table id = "_deviceDim" class="table table-sm">
+	<tr>
+		<th class = "headerSortUp" onclick="sortTable(0)">#</th>
+		<th class = "headerSortUp" onclick="sortTable(1)">Device ID</th>
+		<th class = "headerSortUp" onclick="sortTable(2)">Name</th>
+		<th class = "headerSortUp" onclick="sortTable(3)">Model</th>
+		<th class = "headerSortUp" onclick="sortTable(4)">Status</th>
+	</tr>
+		{% for result in devices %}
+		<tr>
+			<td>{{result.id}}</td>
+			<td>{{result.device_id}}</td>
+			<td>{{result.device_name}}</td>
+			<td>{{result.device_model}}</td>
+			<td>{{result.device_status}}</td>
+					<!--<td><a class="btn btn-sm btn-info">Update</a></td>-->
+		</tr>
+		{% endfor %}
+</table>
+

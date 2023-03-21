@@ -1,0 +1,48 @@
+<table id = "_deviceData" class="table table-sm">
+      <tr>
+          <th>#</th>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Global Active Power</th>
+          <th>Global Reactive Power</th>
+          <th>Voltage</th>
+          <th>Sub Metering 1</th>
+          <th>Sub Metering 2</th>
+          <th>Sub Metering 3</th>
+      </tr>
+        {% for result in data%}
+        <tr>
+          <td>{{result.id}}</td>
+          <td>{{result.device_id}}</td>
+          <td>{{result.datestmp}}</td>
+          <td>{{result.timestmp}}</td>
+          <td>{{result.global_active_power}}</td>
+          <td>{{result.global_reactive_power}}</td>
+          <td>{{result.voltage}}</td>
+          <td>{{result.sub_metering_1}}</td>
+          <td>{{result.sub_metering_2}}</td>
+          <td>{{result.sub_metering_3}}</td>
+        </tr>
+        {% endfor %}
+
+</table>
+
+<script type = "text/javascript">
+
+$("th").on("click",function(){
+  var column = $(this).data("column")
+  var order = $(this).data("order")
+  console.log("Column was clicked.", column, order)
+
+  if(order == "desc"){
+    $(this).data("order", "asc")
+  }else{
+    $(this).data("order", "desc")
+  }
+})
+
+</script>
+
+
+
